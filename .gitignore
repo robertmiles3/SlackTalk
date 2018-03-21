@@ -1,0 +1,10 @@
+*.suo
+*.user
+*.userprefs
+.DS_Store
+[Bb]in
+[Oo]bj
+packages/
+logs/
+.vs/
+.idea
