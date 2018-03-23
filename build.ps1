@@ -17,4 +17,4 @@ if(Test-Path .\artifacts) { Remove-Item .\artifacts -Force -Recurse }
 exec { & dotnet restore }
 
 # PackageVersion set by appveyor.yml csproj patching
-exec { & dotnet pack ".\src\SlackTalk\SlackTalk.csproj" -c Release -o ..\artifacts }  
+exec { & dotnet pack ".\src\SlackTalk\SlackTalk.csproj" -c Release -o ..\..\artifacts }  
