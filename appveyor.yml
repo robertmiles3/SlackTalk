@@ -1,0 +1,72 @@
+# common configuration for ALL branches
+
+environment:
+  version_number: '1.0.0'
+version: '$(version_number)-beta001'
+
+# use VS2017
+image: Visual Studio 2017
+
+# Pull Requests do not increment build number
+pull_requests:  
+  do_not_increment_build_number: true
+
+# branches whitelist
+branches:  
+  only:
+  - develop
+  - master
+
+# Do not publish NuGet package artifacts to account/project feeds on Pull Requests
+nuget:  
+  disable_publish_on_pr: true
+
+# tests
+test_script:
+- cmd: cd tests
+- cmd: cd SlackTalk.Tests
+- cmd: dotnet restore
+- cmd: dotnet xunit -c Release --fx-version 2.0.0
+
+# patch version for .NET Core
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+  assembly_version: '$(version_number)'
+  file_version: '$(version_number)'
+  informational_version: '{version}'
+
+# start to override common configuration
+for:
+
+# override settings for `develop` branch
+-
+  branches:  
+    only:
+    - develop
+  # use unique version when running tests from develop
+  version: '$(version_number)-develop{build}'
+  # no builds on develop, only tests
+  build: off
+
+# override settings for `master` branch
+-
+  branches:  
+    only:
+    - master
+  build_script:  
+  - ps: .\build.ps1
+  artifacts:  
+  - path: .\artifacts\**\*.nupkg
+    name: NuGet
+  deploy:  
+  # deploy to MyGet on master commit
+  - provider: NuGet
+    server: https://www.myget.org/F/devalp/api/v2/package
+    api_key:
+      secure: Eg0KDgCo29hYMHnywQRkdU/4r8PdKaGH4LNYAIVBjCc6lrQD1kOrbk8tYMBa41Ur
+    skip_symbols: true
+    on:
+      branch: master
