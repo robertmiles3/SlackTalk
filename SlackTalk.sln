@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "global", "global", "{92FF4EF9-A6A3-4F0B-AFE5-898722693CF0}"
+ProjectSection(SolutionItems) = preProject
+	appveyor.yml = appveyor.yml
+	build.ps1 = build.ps1
+	LICENSE.txt = LICENSE.txt
+	README.md = README.md
+EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D6111EC9-3636-465F-BAB7-A44E08A1EBED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{85EDCF91-62CB-467B-BAD0-FDEF84939679}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlackTalk", "src\SlackTalk\SlackTalk.csproj", "{3F97F397-DD99-434D-92B2-71A48F90BCD5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlackTalk.Tests", "tests\SlackTalk.Tests\SlackTalk.Tests.csproj", "{4FFE4BA0-C268-4722-BAE0-C99329C416BF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3F97F397-DD99-434D-92B2-71A48F90BCD5} = {D6111EC9-3636-465F-BAB7-A44E08A1EBED}
+		{4FFE4BA0-C268-4722-BAE0-C99329C416BF} = {85EDCF91-62CB-467B-BAD0-FDEF84939679}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3F97F397-DD99-434D-92B2-71A48F90BCD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F97F397-DD99-434D-92B2-71A48F90BCD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F97F397-DD99-434D-92B2-71A48F90BCD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F97F397-DD99-434D-92B2-71A48F90BCD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FFE4BA0-C268-4722-BAE0-C99329C416BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FFE4BA0-C268-4722-BAE0-C99329C416BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FFE4BA0-C268-4722-BAE0-C99329C416BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FFE4BA0-C268-4722-BAE0-C99329C416BF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
