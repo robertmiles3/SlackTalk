@@ -33,20 +33,20 @@ namespace Devalp.SlackTalk
     /// </summary>
     public class SlackTalkRouter : ISlackTalkRouter
     {
-        private readonly IServiceProvider _provider;
+        private readonly IServiceScopeFactory _scopeFactory;
         private readonly ILogger _logger;
         private readonly string _verificationToken;
 
         /// <summary>
         /// Creates a new instance of <see cref="SlackTalkRouter"/>
         /// </summary>
-        /// <param name="provider">The services provider to find the appropriate processor to handle the incoming notification.</param>
+        /// <param name="scopeFactory">The scope factory to create a scope to find the appropriate processor to handle the incoming notification.</param>
         /// <param name="options">The options for the router.</param>
         /// <param name="logger">The logger.</param>
-        /// <exception cref="ArgumentNullException">Throws when <paramref name="provider"/> or <paramref name="options"/> is <c>null</c>.</exception>
-        public SlackTalkRouter(IServiceProvider provider, IOptions<SlackTalkOptions> options, ILogger<SlackTalkRouter> logger)
+        /// <exception cref="ArgumentNullException">Throws when <paramref name="scopeFactory"/> or <paramref name="options"/> is <c>null</c>.</exception>
+        public SlackTalkRouter(IServiceScopeFactory scopeFactory, IOptions<SlackTalkOptions> options, ILogger<SlackTalkRouter> logger)
         {
-            _provider = provider ?? throw new ArgumentNullException(nameof(provider));
+            _scopeFactory = scopeFactory ?? throw new ArgumentNullException(nameof(scopeFactory));
             _logger = logger;
             _ = options ?? throw new ArgumentNullException(nameof(options));
             _verificationToken = options.Value.VerificationToken;
@@ -114,7 +114,7 @@ namespace Devalp.SlackTalk
 
             if (!isRespondable)
                 return;
-            
+
             if (response.ImmediateMessage != null)
             {
                 // Respond immediately with a message
@@ -162,18 +162,21 @@ namespace Devalp.SlackTalk
                 throw new Exception("Invalid token.");
 
             // Attempt to find the processor in the DI container that matches this type
-            var services = _provider.GetServices<ISlackTalkProcessor>();
-            if (!(services.FirstOrDefault(p => p is IHandlesCommands commandProcessor && commandProcessor.Commands.Contains(command.command)) is IHandlesCommands processor))
-                throw new Exception("No registered processor found to handle this command");
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var services = scope.ServiceProvider.GetServices<ISlackTalkProcessor>();
+                if (!(services.FirstOrDefault(p => p is IHandlesCommands commandProcessor && commandProcessor.Commands.Contains(command.command)) is IHandlesCommands processor))
+                    throw new Exception("No registered processor found to handle this command");
                     
-            // Process the command
-            var response = await processor.ProcessAsync(command);
+                // Process the command
+                var response = await processor.ProcessAsync(command);
             
-            if (response == null)
-                throw new Exception("Processor failed to process this command");
-            
-            response.response_url = command.response_url;
-            return response;
+                if (response == null)
+                    throw new Exception("Processor failed to process this command");
+
+                response.response_url = command.response_url;
+                return response;
+            }
         }
 
         private async Task<AppResponse> ProcessActionAsync(HttpContext context)
@@ -188,18 +191,21 @@ namespace Devalp.SlackTalk
                 throw new Exception("Invalid token.");
                     
             // Attempt to find the processor in the DI container that matches this type
-            var services = _provider.GetServices<ISlackTalkProcessor>();
-            if (!(services.FirstOrDefault(p => p is IHandlesActions actionProcessor && actionProcessor.CallbackIds.Contains(callback.callback_id)) is IHandlesActions processor))
-                throw new Exception("No registered processor found to handle this action");
-                    
-            // Process the callback
-            var response = await processor.ProcessAsync(callback);
-            
-            if (response == null)
-                throw new Exception("Processor failed to process this action");
-            
-            response.response_url = callback.response_url;
-            return response;
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var services = scope.ServiceProvider.GetServices<ISlackTalkProcessor>();
+                if (!(services.FirstOrDefault(p => p is IHandlesActions actionProcessor && actionProcessor.CallbackIds.Contains(callback.callback_id)) is IHandlesActions processor))
+                    throw new Exception("No registered processor found to handle this action");
+
+                // Process the callback
+                var response = await processor.ProcessAsync(callback);
+
+                if (response == null)
+                    throw new Exception("Processor failed to process this action");
+
+                response.response_url = callback.response_url;
+                return response;
+            }
         }
 
         private async Task<bool> ProcessEventAsync(HttpContext context)
@@ -234,17 +240,21 @@ namespace Devalp.SlackTalk
                 }
                 
                 // Attempt to find the processor in the DI container that matches this type
-                var services = _provider.GetServices<ISlackTalkProcessor>();
-                if (!(services.FirstOrDefault(p => p is IHandlesEvents eventProcessor && eventProcessor.EventTypes.Contains(outerEvent.Event.type)) is IHandlesEvents processor))
-                    throw new Exception("No registered processor found to handle this command");
-                
-                // Process the command
-                await processor.ProcessAsync(outerEvent);
+                using (var scope = _scopeFactory.CreateScope())
+                {
+                    var services = scope.ServiceProvider.GetServices<ISlackTalkProcessor>();
+                    if (!(services.FirstOrDefault(p => p is IHandlesEvents eventProcessor && eventProcessor.EventTypes.Contains(outerEvent.Event.type)) is IHandlesEvents processor))
+                        throw new Exception("No registered processor found to handle this command");
 
-                return true;
+                    // Process the command
+                    await processor.ProcessAsync(outerEvent);
+
+                    return true;
+                }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _logger.LogError(e, null, null);
                 throw;
             }
         }

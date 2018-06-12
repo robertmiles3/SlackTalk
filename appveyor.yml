@@ -2,7 +2,7 @@
 
 environment:
   version_number: '1.0.0'
-version: '$(version_number)-beta001'
+version: '$(version_number)-beta002'
 
 # use VS2017
 image: Visual Studio 2017
@@ -26,7 +26,7 @@ test_script:
 - cmd: cd tests
 - cmd: cd SlackTalk.Tests
 - cmd: dotnet restore
-- cmd: dotnet xunit -c Release --fx-version 2.0.0
+- cmd: dotnet test -c Release
 
 # patch version for .NET Core
 dotnet_csproj:
