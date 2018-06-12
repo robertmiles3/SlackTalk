@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Devalp.SlackTalk.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using Moq;
@@ -78,7 +79,7 @@ namespace Devalp.SlackTalk.Tests
         public async Task Command_Handles_Invalid_Token()
         {
             var router = new SlackTalkRouter(
-                provider: new Mock<IServiceProvider>().Object, 
+                scopeFactory: new Mock<IServiceScopeFactory>().Object, 
                 options: TestHelper.GetOptions(),
                 logger: new Mock<ILogger<SlackTalkRouter>>().Object);
 
@@ -93,11 +94,8 @@ namespace Devalp.SlackTalk.Tests
         [Fact(DisplayName = "Command_Handles_Missing_Processor")]
         public async Task Command_Handles_Missing_Processor()
         {
-            var serviceProvider = new Mock<IServiceProvider>();
-            serviceProvider.Setup(x => x.GetService(typeof(IEnumerable<ISlackTalkProcessor>))).Returns(new List<ISlackTalkProcessor>(0));
-            
             var router = new SlackTalkRouter(
-                provider: serviceProvider.Object, 
+                scopeFactory: TestHelper.GetServiceScopeFactory(new List<ISlackTalkProcessor>(0)), 
                 options: TestHelper.GetOptions(),
                 logger: new Mock<ILogger<SlackTalkRouter>>().Object);
             
@@ -112,11 +110,8 @@ namespace Devalp.SlackTalk.Tests
         [Fact(DisplayName = "Command_Handles_Invalid_Command")]
         public async Task Command_Handles_Invalid_Command()
         {
-            var serviceProvider = new Mock<IServiceProvider>();
-            serviceProvider.Setup(x => x.GetService(typeof(IEnumerable<ISlackTalkProcessor>))).Returns(new List<ISlackTalkProcessor> { new DummyProcessor() });
-            
             var router = new SlackTalkRouter(
-                provider: serviceProvider.Object, 
+                scopeFactory: TestHelper.GetServiceScopeFactory(new List<ISlackTalkProcessor> { new DummyProcessor() }), 
                 options: TestHelper.GetOptions(),
                 logger: new Mock<ILogger<SlackTalkRouter>>().Object);
 
@@ -131,11 +126,8 @@ namespace Devalp.SlackTalk.Tests
         [Fact(DisplayName = "Command_Handles_Failing_Processor")]
         public async Task Command_Handles_Failing_Processor()
         {
-            var serviceProvider = new Mock<IServiceProvider>();
-            serviceProvider.Setup(x => x.GetService(typeof(IEnumerable<ISlackTalkProcessor>))).Returns(new List<ISlackTalkProcessor> { new FailingProcessor() });
-            
             var router = new SlackTalkRouter(
-                provider: serviceProvider.Object, 
+                scopeFactory: TestHelper.GetServiceScopeFactory(new List<ISlackTalkProcessor> { new FailingProcessor() }), 
                 options: TestHelper.GetOptions(),
                 logger: new Mock<ILogger<SlackTalkRouter>>().Object);
 
@@ -150,11 +142,8 @@ namespace Devalp.SlackTalk.Tests
         [Fact(DisplayName = "Command_Handles_Immediate_Response")]
         public async Task Command_Handles_Immediate_Response()
         {
-            var serviceProvider = new Mock<IServiceProvider>();
-            serviceProvider.Setup(x => x.GetService(typeof(IEnumerable<ISlackTalkProcessor>))).Returns(new List<ISlackTalkProcessor> { new DummyProcessor() });
-            
             var router = new SlackTalkRouter(
-                provider: serviceProvider.Object, 
+                scopeFactory: TestHelper.GetServiceScopeFactory(new List<ISlackTalkProcessor> { new DummyProcessor() }), 
                 options: TestHelper.GetOptions(),
                 logger: new Mock<ILogger<SlackTalkRouter>>().Object);
 
@@ -169,11 +158,8 @@ namespace Devalp.SlackTalk.Tests
         [Fact(DisplayName = "Command_Handles_Null_Message")]
         public async Task Command_Handles_Null_Message()
         {
-            var serviceProvider = new Mock<IServiceProvider>();
-            serviceProvider.Setup(x => x.GetService(typeof(IEnumerable<ISlackTalkProcessor>))).Returns(new List<ISlackTalkProcessor> { new NullMessageProcessor() });
-            
             var router = new SlackTalkRouter(
-                provider: serviceProvider.Object, 
+                scopeFactory: TestHelper.GetServiceScopeFactory(new List<ISlackTalkProcessor> { new NullMessageProcessor() }), 
                 options: TestHelper.GetOptions(),
                 logger: new Mock<ILogger<SlackTalkRouter>>().Object);
 
@@ -189,11 +175,8 @@ namespace Devalp.SlackTalk.Tests
         [Fact(DisplayName = "Command_Handles_Delayed_Response_Success")]
         public async Task Command_Handles_Delayed_Response_Success()
         {
-            var serviceProvider = new Mock<IServiceProvider>();
-            serviceProvider.Setup(x => x.GetService(typeof(IEnumerable<ISlackTalkProcessor>))).Returns(new List<ISlackTalkProcessor> { new DelayedResponseProcessor() });
-            
             var router = new SlackTalkRouter(
-                provider: serviceProvider.Object, 
+                scopeFactory: TestHelper.GetServiceScopeFactory(new List<ISlackTalkProcessor> { new DelayedResponseProcessor() }), 
                 options: TestHelper.GetOptions(),
                 logger: new Mock<ILogger<SlackTalkRouter>>().Object);
 
@@ -209,18 +192,14 @@ namespace Devalp.SlackTalk.Tests
         [Fact(DisplayName = "Command_Handles_Delayed_Response_Failure")]
         public async Task Command_Handles_Delayed_Response_Failure()
         {
-            var serviceProvider = new Mock<IServiceProvider>();
-            serviceProvider.Setup(x => x.GetService(typeof(IEnumerable<ISlackTalkProcessor>))).Returns(new List<ISlackTalkProcessor> { new DelayedResponseProcessor() });
-            
             var router = new SlackTalkRouter(
-                provider: serviceProvider.Object, 
+                scopeFactory: TestHelper.GetServiceScopeFactory(new List<ISlackTalkProcessor> { new DelayedResponseProcessor() }), 
                 options: TestHelper.GetOptions(),
                 logger: new Mock<ILogger<SlackTalkRouter>>().Object);
 
             var context = TestHelper.GetIncomingCommandContext(new SlackCommand { command = "/foo", token = "bar", response_url = "https://www.example.com/" });
 
             await router.ProcessAsync(IncomingMessageType.Command, context, TestHelper.GetHttpClient(string.Empty, HttpStatusCode.InternalServerError));
-            var body = context.Response.Body.ReadAsString();
 
             Assert.Equal(200, context.Response.StatusCode);
         }
@@ -229,7 +208,7 @@ namespace Devalp.SlackTalk.Tests
         public async Task Action_Handles_Invalid_Token()
         {
             var router = new SlackTalkRouter(
-                provider: new Mock<IServiceProvider>().Object, 
+                scopeFactory: new Mock<IServiceScopeFactory>().Object, 
                 options: TestHelper.GetOptions(),
                 logger: new Mock<ILogger<SlackTalkRouter>>().Object);
 
@@ -244,11 +223,8 @@ namespace Devalp.SlackTalk.Tests
         [Fact(DisplayName = "Action_Handles_Missing_Processor")]
         public async Task Action_Handles_Missing_Processor()
         {
-            var serviceProvider = new Mock<IServiceProvider>();
-            serviceProvider.Setup(x => x.GetService(typeof(IEnumerable<ISlackTalkProcessor>))).Returns(new List<ISlackTalkProcessor>(0));
-            
             var router = new SlackTalkRouter(
-                provider: serviceProvider.Object, 
+                scopeFactory: TestHelper.GetServiceScopeFactory(new List<ISlackTalkProcessor>(0)), 
                 options: TestHelper.GetOptions(),
                 logger: new Mock<ILogger<SlackTalkRouter>>().Object);
             
@@ -263,11 +239,8 @@ namespace Devalp.SlackTalk.Tests
         [Fact(DisplayName = "Action_Handles_Invalid_Action")]
         public async Task Action_Handles_Invalid_Action()
         {
-            var serviceProvider = new Mock<IServiceProvider>();
-            serviceProvider.Setup(x => x.GetService(typeof(IEnumerable<ISlackTalkProcessor>))).Returns(new List<ISlackTalkProcessor> { new DummyProcessor() });
-            
             var router = new SlackTalkRouter(
-                provider: serviceProvider.Object, 
+                scopeFactory: TestHelper.GetServiceScopeFactory(new List<ISlackTalkProcessor> { new DummyProcessor() }), 
                 options: TestHelper.GetOptions(),
                 logger: new Mock<ILogger<SlackTalkRouter>>().Object);
 
@@ -282,11 +255,8 @@ namespace Devalp.SlackTalk.Tests
         [Fact(DisplayName = "Action_Handles_Failing_Processor")]
         public async Task Action_Handles_Failing_Processor()
         {
-            var serviceProvider = new Mock<IServiceProvider>();
-            serviceProvider.Setup(x => x.GetService(typeof(IEnumerable<ISlackTalkProcessor>))).Returns(new List<ISlackTalkProcessor> { new FailingProcessor() });
-            
             var router = new SlackTalkRouter(
-                provider: serviceProvider.Object, 
+                scopeFactory: TestHelper.GetServiceScopeFactory(new List<ISlackTalkProcessor> { new FailingProcessor() }), 
                 options: TestHelper.GetOptions(),
                 logger: new Mock<ILogger<SlackTalkRouter>>().Object);
 
@@ -301,11 +271,8 @@ namespace Devalp.SlackTalk.Tests
         [Fact(DisplayName = "Action_Handles_Immediate_Response")]
         public async Task Action_Handles_Immediate_Response()
         {
-            var serviceProvider = new Mock<IServiceProvider>();
-            serviceProvider.Setup(x => x.GetService(typeof(IEnumerable<ISlackTalkProcessor>))).Returns(new List<ISlackTalkProcessor> { new DummyProcessor() });
-            
             var router = new SlackTalkRouter(
-                provider: serviceProvider.Object, 
+                scopeFactory: TestHelper.GetServiceScopeFactory(new List<ISlackTalkProcessor> { new DummyProcessor() }), 
                 options: TestHelper.GetOptions(),
                 logger: new Mock<ILogger<SlackTalkRouter>>().Object);
 
@@ -320,11 +287,8 @@ namespace Devalp.SlackTalk.Tests
         [Fact(DisplayName = "Action_Handles_Null_Message")]
         public async Task Action_Handles_Null_Message()
         {
-            var serviceProvider = new Mock<IServiceProvider>();
-            serviceProvider.Setup(x => x.GetService(typeof(IEnumerable<ISlackTalkProcessor>))).Returns(new List<ISlackTalkProcessor> { new NullMessageProcessor() });
-            
             var router = new SlackTalkRouter(
-                provider: serviceProvider.Object, 
+                scopeFactory: TestHelper.GetServiceScopeFactory(new List<ISlackTalkProcessor> { new NullMessageProcessor() }), 
                 options: TestHelper.GetOptions(),
                 logger: new Mock<ILogger<SlackTalkRouter>>().Object);
 
@@ -340,11 +304,8 @@ namespace Devalp.SlackTalk.Tests
         [Fact(DisplayName = "Action_Handles_Delayed_Response_Success")]
         public async Task Action_Handles_Delayed_Response_Success()
         {
-            var serviceProvider = new Mock<IServiceProvider>();
-            serviceProvider.Setup(x => x.GetService(typeof(IEnumerable<ISlackTalkProcessor>))).Returns(new List<ISlackTalkProcessor> { new DelayedResponseProcessor() });
-            
             var router = new SlackTalkRouter(
-                provider: serviceProvider.Object, 
+                scopeFactory: TestHelper.GetServiceScopeFactory(new List<ISlackTalkProcessor> { new DelayedResponseProcessor() }), 
                 options: TestHelper.GetOptions(),
                 logger: new Mock<ILogger<SlackTalkRouter>>().Object);
 
@@ -360,18 +321,14 @@ namespace Devalp.SlackTalk.Tests
         [Fact(DisplayName = "Action_Handles_Delayed_Response_Failure")]
         public async Task Action_Handles_Delayed_Response_Failure()
         {
-            var serviceProvider = new Mock<IServiceProvider>();
-            serviceProvider.Setup(x => x.GetService(typeof(IEnumerable<ISlackTalkProcessor>))).Returns(new List<ISlackTalkProcessor> { new DelayedResponseProcessor() });
-            
             var router = new SlackTalkRouter(
-                provider: serviceProvider.Object, 
+                scopeFactory: TestHelper.GetServiceScopeFactory(new List<ISlackTalkProcessor> { new DelayedResponseProcessor() }), 
                 options: TestHelper.GetOptions(),
                 logger: new Mock<ILogger<SlackTalkRouter>>().Object);
 
             var context = TestHelper.GetIncomingActionContext(new SlackCallback { callback_id = "foo_callback", token = "bar", response_url = "https://www.example.com/" });
 
             await router.ProcessAsync(IncomingMessageType.Action, context, TestHelper.GetHttpClient(string.Empty, HttpStatusCode.InternalServerError));
-            var body = context.Response.Body.ReadAsString();
 
             Assert.Equal(200, context.Response.StatusCode);
         }

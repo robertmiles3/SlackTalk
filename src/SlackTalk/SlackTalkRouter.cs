@@ -33,20 +33,20 @@ namespace Devalp.SlackTalk
     /// </summary>
     public class SlackTalkRouter : ISlackTalkRouter
     {
-        private readonly IServiceProvider _provider;
+        private readonly IServiceScopeFactory _scopeFactory;
         private readonly ILogger _logger;
         private readonly string _verificationToken;
 
         /// <summary>
         /// Creates a new instance of <see cref="SlackTalkRouter"/>
         /// </summary>
-        /// <param name="provider">The services provider to find the appropriate processor to handle the incoming notification.</param>
+        /// <param name="scopeFactory">The scope factory to create a scope to find the appropriate processor to handle the incoming notification.</param>
         /// <param name="options">The options for the router.</param>
         /// <param name="logger">The logger.</param>
-        /// <exception cref="ArgumentNullException">Throws when <paramref name="provider"/> or <paramref name="options"/> is <c>null</c>.</exception>
-        public SlackTalkRouter(IServiceProvider provider, IOptions<SlackTalkOptions> options, ILogger<SlackTalkRouter> logger)
+        /// <exception cref="ArgumentNullException">Throws when <paramref name="scopeFactory"/> or <paramref name="options"/> is <c>null</c>.</exception>
+        public SlackTalkRouter(IServiceScopeFactory scopeFactory, IOptions<SlackTalkOptions> options, ILogger<SlackTalkRouter> logger)
         {
-            _provider = provider ?? throw new ArgumentNullException(nameof(provider));
+            _scopeFactory = scopeFactory ?? throw new ArgumentNullException(nameof(scopeFactory));
             _logger = logger;
             _ = options ?? throw new ArgumentNullException(nameof(options));
             _verificationToken = options.Value.VerificationToken;
@@ -162,7 +162,7 @@ namespace Devalp.SlackTalk
                 throw new Exception("Invalid token.");
 
             // Attempt to find the processor in the DI container that matches this type
-            using (var scope = _provider.CreateScope())
+            using (var scope = _scopeFactory.CreateScope())
             {
                 var services = scope.ServiceProvider.GetServices<ISlackTalkProcessor>();
                 if (!(services.FirstOrDefault(p => p is IHandlesCommands commandProcessor && commandProcessor.Commands.Contains(command.command)) is IHandlesCommands processor))
@@ -191,7 +191,7 @@ namespace Devalp.SlackTalk
                 throw new Exception("Invalid token.");
                     
             // Attempt to find the processor in the DI container that matches this type
-            using (var scope = _provider.CreateScope())
+            using (var scope = _scopeFactory.CreateScope())
             {
                 var services = scope.ServiceProvider.GetServices<ISlackTalkProcessor>();
                 if (!(services.FirstOrDefault(p => p is IHandlesActions actionProcessor && actionProcessor.CallbackIds.Contains(callback.callback_id)) is IHandlesActions processor))
@@ -240,7 +240,7 @@ namespace Devalp.SlackTalk
                 }
                 
                 // Attempt to find the processor in the DI container that matches this type
-                using (var scope = _provider.CreateScope())
+                using (var scope = _scopeFactory.CreateScope())
                 {
                     var services = scope.ServiceProvider.GetServices<ISlackTalkProcessor>();
                     if (!(services.FirstOrDefault(p => p is IHandlesEvents eventProcessor && eventProcessor.EventTypes.Contains(outerEvent.Event.type)) is IHandlesEvents processor))

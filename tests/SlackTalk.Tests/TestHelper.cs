@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -6,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Devalp.SlackTalk.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Moq;
@@ -67,6 +69,20 @@ namespace Devalp.SlackTalk.Tests
                 }));
 
             return new HttpClient(mockMessageHandler.Object);
+        }
+
+        internal static IServiceScopeFactory GetServiceScopeFactory(List<ISlackTalkProcessor> serviceProviderReturn)
+        {
+            var serviceProvider = new Mock<IServiceProvider>();
+            serviceProvider.Setup(x => x.GetService(typeof(IEnumerable<ISlackTalkProcessor>))).Returns(serviceProviderReturn);
+            
+            var scope = new Mock<IServiceScope>();
+            scope.Setup(x => x.ServiceProvider).Returns(serviceProvider.Object);
+            
+            var scopeFactory = new Mock<IServiceScopeFactory>();
+            scopeFactory.Setup(x => x.CreateScope()).Returns(scope.Object);
+            
+            return scopeFactory.Object;
         }
     }
 }
