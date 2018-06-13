@@ -56,5 +56,10 @@ namespace Devalp.SlackTalk.Models
         /// A collection of actions (buttons or menus) to include in the attachment. Required when using message buttons or message menus. A maximum of 5 actions per attachment may be provided.
         /// </summary>
         public List<SlackAction> actions { get; set; }
+
+        /// <summary>
+        /// Valid values for mrkdwn_in are: ["pretext", "text", "fields"]. Setting "fields" will enable markup formatting for the `value` of each field.
+        /// </summary>
+        public List<string> mrkdwn_in { get; set; }
     }
 }

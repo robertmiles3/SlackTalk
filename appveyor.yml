@@ -2,7 +2,7 @@
 
 environment:
   version_number: '1.0.0'
-version: '$(version_number)-beta002'
+version: '$(version_number)-beta003'
 
 # use VS2017
 image: Visual Studio 2017
