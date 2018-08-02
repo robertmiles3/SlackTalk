@@ -35,7 +35,7 @@ namespace Devalp.SlackTalk
         /// Sends a message to a channel.
         /// </summary>
         /// <param name="message">The message to send.</param>
-        public async Task<SlackChatPostMessageResponse> ChatPostMessage(SlackMessage message)
+        public async Task<SlackChatPostMessageResponse> ChatPostMessageAsync(SlackMessage message)
         {
             try
             {
@@ -68,6 +68,6 @@ namespace Devalp.SlackTalk
         /// Sends a message to a channel.
         /// </summary>
         /// <param name="message">The message to send.</param>
-        Task<SlackChatPostMessageResponse> ChatPostMessage(SlackMessage message);
+        Task<SlackChatPostMessageResponse> ChatPostMessageAsync(SlackMessage message);
     }
 }
