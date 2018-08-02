@@ -23,6 +23,9 @@ namespace Devalp.SlackTalk
             // Add singleton router
             services.AddSingleton<ISlackTalkRouter, SlackTalkRouter>();
             
+            // Add singleton client
+            services.AddSingleton<ISlackTalkClient, SlackTalkClient>();
+            
             return services;
         }
     }

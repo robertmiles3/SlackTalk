@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Devalp.SlackTalk.Tests
 {
-    public class Tests
+    public partial class Tests
     {
         [Fact(DisplayName = "Can_Convert_Form_To_SlackCommand")]
         public void Can_Convert_Form_To_SlackCommand()

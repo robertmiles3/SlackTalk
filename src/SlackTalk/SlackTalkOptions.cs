@@ -24,5 +24,10 @@
         /// Slack App verification token. Use this token to verify that requests are actually coming from Slack.
         /// </summary>
         public string VerificationToken { get; set; }
+        
+        /// <summary>
+        /// Access token utilized anytime you use the <see cref="SlackTalkClient"/>.
+        /// </summary>
+        public string AccessToken { get; set; }
     }
 }
