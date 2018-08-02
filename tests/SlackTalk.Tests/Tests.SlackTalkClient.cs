@@ -24,7 +24,7 @@ namespace Devalp.SlackTalk.Tests
                 text = "some message",
                 channel = "#testing"
             };
-            var result = await client.ChatPostMessage(message);
+            var result = await client.ChatPostMessageAsync(message);
 
             Assert.True(result.ok);
             Assert.Equal(message.text, result.message.text);
