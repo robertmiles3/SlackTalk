@@ -1,4 +1,4 @@
-namespace Devalp.SlackTalk.Models
+namespace SlackTalk.Models
 {
     /// <summary>
     /// Response model when POSTing to chat.postMessage

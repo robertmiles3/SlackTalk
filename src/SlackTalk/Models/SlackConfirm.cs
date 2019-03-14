@@ -1,4 +1,4 @@
-namespace Devalp.SlackTalk.Models
+namespace SlackTalk.Models
 {
     /// <summary>
     /// A SlackConfirm is a confirmation warning to protect users from destructive actions or particularly distinguished decisions by asking them to confirm their button click one more time. Use confirmation dialogs with care.

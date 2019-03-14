@@ -1,4 +1,4 @@
-namespace Devalp.SlackTalk.Models
+namespace SlackTalk.Models
 {
     /// <summary>
     /// A collection of option fields. Used in static and external message menu data types. The value is especially important when used in selected_options and must match one of the previously provided options.

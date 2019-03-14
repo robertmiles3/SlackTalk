@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Devalp.SlackTalk.Models;
+using SlackTalk.Models;
 
-namespace Devalp.SlackTalk
+namespace SlackTalk
 {
     /// <summary>
     /// A response coming back from a processor that informs the router how and what to send back

@@ -2,11 +2,11 @@ using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Devalp.SlackTalk.Models;
+using SlackTalk.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Devalp.SlackTalk
+namespace SlackTalk
 {
     /// <summary>
     /// A client for interacting with the Slack API

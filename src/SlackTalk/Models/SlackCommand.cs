@@ -1,4 +1,4 @@
-﻿namespace Devalp.SlackTalk.Models
+﻿namespace SlackTalk.Models
 {
     /// <summary>
     /// The slash command that is posted from Slack. They typically trigger an action (like posting a gif, or starting a video conference, or adding something new to your todo list).

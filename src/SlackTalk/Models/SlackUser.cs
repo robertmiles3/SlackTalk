@@ -1,4 +1,4 @@
-﻿namespace Devalp.SlackTalk.Models
+﻿namespace SlackTalk.Models
 {
     /// <summary>
     /// The clicker! The action-invoker! The button-presser! These attributes tell you all about the user who decided to interact with your message.

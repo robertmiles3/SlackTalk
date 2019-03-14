@@ -1,4 +1,4 @@
-﻿namespace Devalp.SlackTalk
+﻿namespace SlackTalk
 {
     /// <summary></summary>
     public enum IncomingMessageType : byte

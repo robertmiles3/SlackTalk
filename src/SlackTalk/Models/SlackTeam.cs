@@ -1,4 +1,4 @@
-﻿namespace Devalp.SlackTalk.Models
+﻿namespace SlackTalk.Models
 {
     /// <summary>
     /// A small set of string attributes about the workspace/team where this action occurred.

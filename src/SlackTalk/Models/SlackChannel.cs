@@ -1,4 +1,4 @@
-﻿namespace Devalp.SlackTalk.Models
+﻿namespace SlackTalk.Models
 {
     /// <summary>
     /// Where it all happened — the user inciting this action clicked a button on a message contained within a channel, and this hash presents attributed about that channel.

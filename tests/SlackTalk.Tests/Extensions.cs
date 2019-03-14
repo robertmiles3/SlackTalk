@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using Devalp.SlackTalk.Models;
+using SlackTalk.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 
-namespace Devalp.SlackTalk.Tests
+namespace SlackTalk.Tests
 {
     internal static class Extensions
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Devalp.SlackTalk.Models
+namespace SlackTalk.Models
 {
     /// <summary>
     /// SlackAttachments are used to add additional components to the message/SlackMessage 

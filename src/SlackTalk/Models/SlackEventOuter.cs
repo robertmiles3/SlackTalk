@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Devalp.SlackTalk.Models
+namespace SlackTalk.Models
 {
     /// <summary>
     /// A SlackEventOuter is also referred to as the "outer event", or the object containing the event that happened itself.

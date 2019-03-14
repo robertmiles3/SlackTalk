@@ -4,13 +4,13 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Devalp.SlackTalk.Models;
+using SlackTalk.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Devalp.SlackTalk
+namespace SlackTalk
 {
     /// <summary>
     /// A router interface for routing event notifications to an appropriate processor

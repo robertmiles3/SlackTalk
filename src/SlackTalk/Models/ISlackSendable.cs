@@ -1,4 +1,4 @@
-﻿namespace Devalp.SlackTalk.Models
+﻿namespace SlackTalk.Models
 {
     /// <summary>
     /// A sendable object back to Slack via either immediate response or delayed via response_url

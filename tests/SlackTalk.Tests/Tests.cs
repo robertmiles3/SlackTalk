@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using Devalp.SlackTalk.Models;
+using SlackTalk.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -10,7 +10,7 @@ using Microsoft.Extensions.Primitives;
 using Moq;
 using Xunit;
 
-namespace Devalp.SlackTalk.Tests
+namespace SlackTalk.Tests
 {
     public partial class Tests
     {
