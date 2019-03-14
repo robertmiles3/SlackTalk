@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Devalp.SlackTalk.Models;
+using SlackTalk.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -13,7 +13,7 @@ using Microsoft.Extensions.Primitives;
 using Moq;
 using Moq.Protected;
 
-namespace Devalp.SlackTalk.Tests
+namespace SlackTalk.Tests
 {
     internal static class TestHelper
     {

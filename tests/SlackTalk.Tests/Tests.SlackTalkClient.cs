@@ -1,11 +1,11 @@
 using System;
 using System.Threading.Tasks;
-using Devalp.SlackTalk.Models;
+using SlackTalk.Models;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
-namespace Devalp.SlackTalk.Tests
+namespace SlackTalk.Tests
 {
     public partial class Tests
     {

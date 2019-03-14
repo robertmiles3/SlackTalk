@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Devalp.SlackTalk.Models
+namespace SlackTalk.Models
 {
     /// <summary>
     /// SlackCallback contains the fields delivered to your action URL whenever a button is pressed or a menu option is selected.

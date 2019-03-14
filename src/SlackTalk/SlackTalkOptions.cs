@@ -1,4 +1,4 @@
-﻿namespace Devalp.SlackTalk
+﻿namespace SlackTalk
 {
     /// <summary>
     /// Options model for settings related to SlackTalk

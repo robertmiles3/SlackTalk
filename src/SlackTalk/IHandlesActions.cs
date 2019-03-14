@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Devalp.SlackTalk.Models;
+using SlackTalk.Models;
 
-namespace Devalp.SlackTalk
+namespace SlackTalk
 {
     /// <summary>
     /// A processor that contains the ability to handle/process a callback action

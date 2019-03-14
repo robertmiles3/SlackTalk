@@ -1,5 +1,5 @@
 ﻿
-namespace Devalp.SlackTalk.Models
+namespace SlackTalk.Models
 {
     /// <summary>
     /// All Web API responses contain a JSON object including some or all of these fields.

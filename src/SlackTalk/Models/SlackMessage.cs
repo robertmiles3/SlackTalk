@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Devalp.SlackTalk.Models
+namespace SlackTalk.Models
 {
     /// <summary>
     /// SlackMessage is the top-level of messages. Messages act as delivery vehicle for all interactive message experiences. Use them not only when initiating messages, but also when updating or creating evolving workflows.

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Devalp.SlackTalk
+namespace SlackTalk
 {
     /// <summary>
     /// Extension methods

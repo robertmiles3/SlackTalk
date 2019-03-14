@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Devalp.SlackTalk
+namespace SlackTalk
 {
     internal static class JsonExtensions
     {

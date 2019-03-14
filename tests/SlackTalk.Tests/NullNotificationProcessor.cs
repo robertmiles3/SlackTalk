@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Devalp.SlackTalk.Models;
+using SlackTalk.Models;
 
-namespace Devalp.SlackTalk.Tests
+namespace SlackTalk.Tests
 {
     public class NullMessageProcessor : ISlackTalkProcessor, IHandlesCommands, IHandlesActions
     {

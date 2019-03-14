@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Devalp.SlackTalk.Models
+namespace SlackTalk.Models
 {
     /// <summary>
     /// Options groups are a set of 100 options divided into groups. They can be used with static or external message menu data types.

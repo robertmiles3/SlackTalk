@@ -1,8 +1,8 @@
 ﻿using System.Net;
-using Devalp.SlackTalk.Models;
+using SlackTalk.Models;
 using Microsoft.AspNetCore.Http;
 
-namespace Devalp.SlackTalk
+namespace SlackTalk
 {
     internal static class FormCollectionExtensions
     {

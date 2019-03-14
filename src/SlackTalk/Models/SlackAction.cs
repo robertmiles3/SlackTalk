@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Devalp.SlackTalk.Models
+namespace SlackTalk.Models
 {
     /// <summary>
     /// A SlackAction is either a button or select that can be attached to a SlackMessage's attachments
